@@ -3,25 +3,164 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --stage-black: #04030b;
+  --stage-indigo: #0f1030;
+  --stage-purple: #240b4f;
+  --stage-magenta: #671447;
+  --stage-gold: #ffca73;
+  --text-primary: #f8f2ff;
+  --text-muted: rgba(255, 255, 255, 0.7);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: var(--font-geist-sans), sans-serif;
+  color: var(--text-primary);
+  background-color: var(--stage-black);
+  background-image:
+    radial-gradient(circle at 15% -10%, rgba(214, 52, 173, 0.25), transparent 35%),
+    radial-gradient(circle at 85% -20%, rgba(84, 95, 255, 0.22), transparent 32%),
+    linear-gradient(165deg, rgba(5, 5, 18, 1) 5%, rgba(2, 2, 8, 1) 60%, rgba(4, 3, 11, 1) 100%);
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+.bg-stage {
+  background-color: var(--stage-black);
+}
+
+.hero-mesh {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(93, 54, 212, 0.38), transparent 35%),
+    radial-gradient(circle at 87% 16%, rgba(230, 54, 167, 0.32), transparent 40%),
+    radial-gradient(circle at 42% 84%, rgba(23, 47, 117, 0.45), transparent 36%),
+    linear-gradient(140deg, #120f2a 0%, #27063f 34%, #090511 62%, #0e1f4b 100%);
+  background-size: 230% 230%;
+  animation: meshShift 22s ease-in-out infinite;
+}
+
+.glow-button {
+  box-shadow:
+    0 0 0 1px rgba(248, 139, 255, 0.45),
+    0 0 22px rgba(228, 87, 255, 0.45),
+    inset 0 0 14px rgba(212, 102, 255, 0.28);
+  background: linear-gradient(135deg, rgba(144, 45, 203, 0.22), rgba(6, 6, 14, 0.4));
+  animation: buttonPulse 3.1s ease-in-out infinite;
+  transition: box-shadow 250ms ease, transform 250ms ease;
+}
+
+.glow-button:hover {
+  box-shadow:
+    0 0 0 1px rgba(255, 181, 255, 0.75),
+    0 0 32px rgba(234, 87, 255, 0.72),
+    inset 0 0 22px rgba(228, 103, 255, 0.3);
+}
+
+.audio-bar {
+  transform-origin: bottom;
+  animation-name: equalize;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: cubic-bezier(0.42, 0, 0.22, 1);
+}
+
+.map-dot {
+  box-shadow: 0 0 18px rgba(246, 139, 255, 0.85);
+  animation-name: dotPulse;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.chart-line {
+  stroke-dasharray: 1900;
+  stroke-dashoffset: 1900;
+  animation: chartFlow 7.8s ease-in-out infinite;
+}
+
+::selection {
+  color: #ffffff;
+  background: rgba(226, 83, 230, 0.45);
+}
+
+@keyframes meshShift {
+  0% {
+    background-position: 0% 20%;
+  }
+  35% {
+    background-position: 55% 0%;
+  }
+  65% {
+    background-position: 95% 80%;
+  }
+  100% {
+    background-position: 0% 20%;
+  }
+}
+
+@keyframes equalize {
+  0% {
+    transform: scaleY(0.35);
+    opacity: 0.42;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.45);
+    opacity: 0.5;
+  }
+}
+
+@keyframes dotPulse {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(0.75);
+    opacity: 0.3;
+  }
+}
+
+@keyframes buttonPulse {
+  0% {
+    filter: saturate(0.9);
+  }
+  50% {
+    filter: saturate(1.18);
+  }
+  100% {
+    filter: saturate(0.9);
+  }
+}
+
+@keyframes chartFlow {
+  0% {
+    stroke-dashoffset: 1900;
+    opacity: 0.45;
+  }
+  42% {
+    stroke-dashoffset: 350;
+    opacity: 0.98;
+  }
+  65% {
+    stroke-dashoffset: 0;
+    opacity: 0.95;
+  }
+  100% {
+    stroke-dashoffset: -260;
+    opacity: 0.2;
   }
 }
