@@ -1,0 +1,175 @@
+import type { CollabRequest, FeatureFlag, MapPin, ProjectRoom, Profile } from "@musempire/contracts";
+
+export const defaultFeatureFlags: FeatureFlag[] = [
+  {
+    key: "invite_only_alpha",
+    enabled: true,
+    description: "Restrict product access to approved alpha accounts",
+    config: {},
+  },
+  {
+    key: "providers_enabled",
+    enabled: true,
+    description: "Enable provider accounts in the alpha build",
+    config: {},
+  },
+  {
+    key: "fans_can_request_access",
+    enabled: true,
+    description: "Allow fans to request room access",
+    config: {},
+  },
+  {
+    key: "map_activity_video",
+    enabled: true,
+    description: "Enable video snippets on the map",
+    config: { maxDurationSeconds: 30 },
+  },
+  {
+    key: "map_activity_audio",
+    enabled: true,
+    description: "Enable audio snippets on the map",
+    config: { maxDurationSeconds: 30 },
+  },
+  {
+    key: "aim_beta",
+    enabled: true,
+    description: "Enable AiM beta",
+    config: { mode: "draft_only" },
+  },
+  {
+    key: "invest_placeholder_enabled",
+    enabled: true,
+    description: "Enable the invest placeholder route",
+    config: {},
+  },
+];
+
+export const sampleMapPins: MapPin[] = [
+  {
+    userId: "78a69f8d-09f5-4bb1-b9d2-3ae93c0f0388",
+    displayName: "Nyra Vale",
+    username: "nyravale",
+    role: "artist",
+    city: "Mumbai",
+    region: "Maharashtra",
+    country: "India",
+    latitude: 19.076,
+    longitude: 72.8777,
+    privacyLevel: "city",
+    genres: ["alt-pop", "indie"],
+    instruments: ["vocals", "synth"],
+    skills: ["songwriting", "live performance"],
+    headline: "Looking for a visual collaborator for a release rollout.",
+    isSeekingCollaboration: true,
+    isOnline: true,
+    activitySnippet: "Dropped a 24 second chorus teaser.",
+  },
+  {
+    userId: "95e3676a-2fd6-4e6b-84e1-c11fb5db0d62",
+    displayName: "Aero North Studio",
+    username: "aeronorth",
+    role: "provider",
+    city: "Bengaluru",
+    region: "Karnataka",
+    country: "India",
+    latitude: 12.9716,
+    longitude: 77.5946,
+    privacyLevel: "city",
+    genres: ["hip-hop", "rnb"],
+    instruments: ["production"],
+    skills: ["mixing", "mastering", "recording"],
+    headline: "Open slots for vocal tracking and mix feedback.",
+    isSeekingCollaboration: true,
+    isOnline: false,
+    activitySnippet: "Hosting a late-night mix clinic.",
+  },
+  {
+    userId: "4f7105ab-46d1-41ca-9f8a-bcc42f2de450",
+    displayName: "Tala Circuit",
+    username: "talacircuit",
+    role: "artist",
+    city: "London",
+    region: "England",
+    country: "United Kingdom",
+    latitude: 51.5072,
+    longitude: -0.1276,
+    privacyLevel: "city",
+    genres: ["electronic", "world"],
+    instruments: ["percussion", "modular"],
+    skills: ["touring", "collaboration"],
+    headline: "Building a cross-border live set for autumn showcases.",
+    isSeekingCollaboration: true,
+    isOnline: true,
+    activitySnippet: "Added two jam sessions to the map heat layer.",
+  },
+];
+
+export const sampleHotspots = [
+  {
+    id: "mumbai-india",
+    city: "Mumbai",
+    region: "Maharashtra",
+    country: "India",
+    artistCount: 42,
+  },
+  {
+    id: "london-uk",
+    city: "London",
+    region: "England",
+    country: "United Kingdom",
+    artistCount: 37,
+  },
+];
+
+export const sampleCollabRequests: CollabRequest[] = [
+  {
+    id: "e6dcb216-c4d9-4c85-b23d-4867bd5b17b6",
+    requesterUserId: "78a69f8d-09f5-4bb1-b9d2-3ae93c0f0388",
+    targetUserId: "95e3676a-2fd6-4e6b-84e1-c11fb5db0d62",
+    message: "Need a fast turnaround mix consultation for a release next Friday.",
+    requestedRole: "Mix engineer",
+    status: "pending",
+    createdAt: new Date().toISOString(),
+  },
+];
+
+export const sampleProjectRooms: ProjectRoom[] = [
+  {
+    id: "45b43cb7-c4f5-4fdf-b904-df6bb5dc7f78",
+    ownerUserId: "78a69f8d-09f5-4bb1-b9d2-3ae93c0f0388",
+    name: "Midnight Bloom Release Room",
+    description: "Coordinate artwork, rollout, and partner outreach for the next single.",
+    dueAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).toISOString(),
+    memberRole: "owner",
+    taskSummary: {
+      todo: 4,
+      inProgress: 2,
+      done: 1,
+    },
+    createdAt: new Date().toISOString(),
+  },
+];
+
+export const sampleProfile: Profile = {
+  userId: "00000000-0000-0000-0000-000000000000",
+  displayName: "Musempire Alpha",
+  username: "musempire_alpha",
+  bio: "Function-first alpha profile used when Supabase is not configured locally.",
+  city: "Mumbai",
+  region: "Maharashtra",
+  country: "India",
+  privacyLevel: "city",
+  avatarUrl: null,
+  genres: ["indie"],
+  instruments: ["vocals"],
+  skills: ["songwriting"],
+  isSeekingCollaboration: true,
+  consentLocation: false,
+  consentAi: false,
+  consentMarketing: false,
+  role: "artist",
+  alphaAccessGranted: true,
+  onboardingCompleted: true,
+  links: [],
+};

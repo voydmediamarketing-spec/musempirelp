@@ -36,6 +36,26 @@ body {
   background-color: var(--stage-black);
 }
 
+.input-base {
+  height: 3rem;
+  width: 100%;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0 1.25rem;
+  color: #fff;
+  outline: none;
+  transition: border-color 200ms ease;
+}
+
+.input-base:focus {
+  border-color: rgba(248, 139, 255, 0.6);
+}
+
+.input-base::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
 .hero-mesh {
   background:
     radial-gradient(circle at 10% 20%, rgba(93, 54, 212, 0.38), transparent 35%),

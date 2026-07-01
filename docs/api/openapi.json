@@ -1,0 +1,1463 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Musempire API",
+    "version": "0.1.0",
+    "description": "Typed API contracts for the Musempire alpha platform."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "MeResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "email": {
+                "type": "string",
+                "nullable": true,
+                "format": "email"
+              }
+            },
+            "required": [
+              "id",
+              "email"
+            ]
+          },
+          "profile": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "userId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "displayName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "username": {
+                "type": "string",
+                "nullable": true,
+                "minLength": 3,
+                "maxLength": 32,
+                "pattern": "^[a-z0-9_]+$"
+              },
+              "bio": {
+                "type": "string",
+                "nullable": true,
+                "maxLength": 500
+              },
+              "city": {
+                "type": "string",
+                "nullable": true,
+                "maxLength": 120
+              },
+              "region": {
+                "type": "string",
+                "nullable": true,
+                "maxLength": 120
+              },
+              "country": {
+                "type": "string",
+                "nullable": true,
+                "maxLength": 120
+              },
+              "privacyLevel": {
+                "type": "string",
+                "enum": [
+                  "hidden",
+                  "city",
+                  "precise"
+                ]
+              },
+              "avatarUrl": {
+                "type": "string",
+                "nullable": true,
+                "format": "uri"
+              },
+              "genres": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": []
+              },
+              "instruments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": []
+              },
+              "skills": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": []
+              },
+              "isSeekingCollaboration": {
+                "type": "boolean",
+                "default": true
+              },
+              "consentLocation": {
+                "type": "boolean",
+                "default": false
+              },
+              "consentAi": {
+                "type": "boolean",
+                "default": false
+              },
+              "consentMarketing": {
+                "type": "boolean",
+                "default": false
+              },
+              "role": {
+                "type": "string",
+                "nullable": true,
+                "enum": [
+                  "artist",
+                  "provider",
+                  "fan"
+                ]
+              },
+              "alphaAccessGranted": {
+                "type": "boolean",
+                "default": false
+              },
+              "onboardingCompleted": {
+                "type": "boolean",
+                "default": false
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "kind": {
+                      "type": "string",
+                      "minLength": 2,
+                      "maxLength": 40
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "isPrimary": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "label",
+                    "url"
+                  ]
+                },
+                "default": []
+              }
+            },
+            "required": [
+              "userId",
+              "displayName",
+              "username",
+              "bio",
+              "city",
+              "region",
+              "country",
+              "privacyLevel",
+              "avatarUrl",
+              "role"
+            ]
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "enum": [
+                    "invite_only_alpha",
+                    "providers_enabled",
+                    "fans_can_request_access",
+                    "map_activity_video",
+                    "map_activity_audio",
+                    "aim_beta",
+                    "invest_placeholder_enabled"
+                  ]
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "config": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "nullable": true
+                  },
+                  "default": {}
+                }
+              },
+              "required": [
+                "key",
+                "enabled",
+                "description"
+              ]
+            }
+          }
+        },
+        "required": [
+          "user",
+          "profile",
+          "flags"
+        ]
+      },
+      "FeatureFlagsResponse": {
+        "type": "object",
+        "properties": {
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "enum": [
+                    "invite_only_alpha",
+                    "providers_enabled",
+                    "fans_can_request_access",
+                    "map_activity_video",
+                    "map_activity_audio",
+                    "aim_beta",
+                    "invest_placeholder_enabled"
+                  ]
+                },
+                "enabled": {
+                  "type": "boolean"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "config": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "nullable": true
+                  },
+                  "default": {}
+                }
+              },
+              "required": [
+                "key",
+                "enabled",
+                "description"
+              ]
+            }
+          }
+        },
+        "required": [
+          "flags"
+        ]
+      },
+      "OnboardingRequest": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "artist",
+              "provider",
+              "fan"
+            ]
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 32,
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "region": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "country": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 120
+          },
+          "privacyLevel": {
+            "type": "string",
+            "enum": [
+              "hidden",
+              "city",
+              "precise"
+            ],
+            "default": "city"
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "instruments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "isSeekingCollaboration": {
+            "type": "boolean",
+            "default": true
+          },
+          "preciseLocationEnabled": {
+            "type": "boolean",
+            "default": false
+          },
+          "consentLocation": {
+            "type": "boolean"
+          },
+          "consentAi": {
+            "type": "boolean"
+          },
+          "consentMarketing": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "role",
+          "displayName",
+          "city",
+          "country",
+          "genres",
+          "consentLocation",
+          "consentAi"
+        ]
+      },
+      "ProfileUpdate": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "username": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 3,
+            "maxLength": 32,
+            "pattern": "^[a-z0-9_]+$"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "city": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 120
+          },
+          "region": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 120
+          },
+          "country": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 120
+          },
+          "privacyLevel": {
+            "type": "string",
+            "enum": [
+              "hidden",
+              "city",
+              "precise"
+            ]
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "instruments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "isSeekingCollaboration": {
+            "type": "boolean",
+            "default": true
+          },
+          "consentLocation": {
+            "type": "boolean",
+            "default": false
+          },
+          "consentAi": {
+            "type": "boolean",
+            "default": false
+          },
+          "consentMarketing": {
+            "type": "boolean",
+            "default": false
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "kind": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 40
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "isPrimary": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "kind",
+                "label",
+                "url"
+              ]
+            },
+            "default": []
+          }
+        },
+        "required": [
+          "displayName",
+          "username",
+          "bio",
+          "city",
+          "region",
+          "country",
+          "privacyLevel"
+        ]
+      },
+      "MapFilter": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "instruments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "artist",
+                "provider",
+                "fan"
+              ]
+            },
+            "default": []
+          },
+          "seekingCollaboration": {
+            "type": "boolean"
+          }
+        }
+      },
+      "MapQueryResponse": {
+        "type": "object",
+        "properties": {
+          "pins": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "artist",
+                    "provider",
+                    "fan"
+                  ]
+                },
+                "city": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "region": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "country": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "latitude": {
+                  "type": "number",
+                  "nullable": true
+                },
+                "longitude": {
+                  "type": "number",
+                  "nullable": true
+                },
+                "privacyLevel": {
+                  "type": "string",
+                  "enum": [
+                    "hidden",
+                    "city",
+                    "precise"
+                  ]
+                },
+                "genres": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": []
+                },
+                "instruments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": []
+                },
+                "skills": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": []
+                },
+                "headline": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "isSeekingCollaboration": {
+                  "type": "boolean"
+                },
+                "isOnline": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "activitySnippet": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "userId",
+                "displayName",
+                "username",
+                "role",
+                "city",
+                "region",
+                "country",
+                "latitude",
+                "longitude",
+                "privacyLevel",
+                "headline",
+                "isSeekingCollaboration",
+                "activitySnippet"
+              ]
+            }
+          },
+          "hotspots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "region": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "country": {
+                  "type": "string"
+                },
+                "artistCount": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "id",
+                "city",
+                "region",
+                "country",
+                "artistCount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "pins",
+          "hotspots"
+        ]
+      },
+      "CollabRequestCreate": {
+        "type": "object",
+        "properties": {
+          "targetUserId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "requestedRole": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "targetUserId",
+          "message",
+          "requestedRole"
+        ]
+      },
+      "CollabRequestsResponse": {
+        "type": "object",
+        "properties": {
+          "requests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "requesterUserId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "targetUserId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "requestedRole": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "pending",
+                    "accepted",
+                    "rejected",
+                    "blocked",
+                    "cancelled"
+                  ]
+                },
+                "createdAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "requesterUserId",
+                "targetUserId",
+                "message",
+                "requestedRole",
+                "status",
+                "createdAt"
+              ]
+            }
+          }
+        },
+        "required": [
+          "requests"
+        ]
+      },
+      "ProjectRoomCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "default": ""
+          },
+          "dueAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "ProjectRoomsResponse": {
+        "type": "object",
+        "properties": {
+          "projectRooms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "ownerUserId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "dueAt": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "memberRole": {
+                  "type": "string",
+                  "enum": [
+                    "owner",
+                    "admin",
+                    "collaborator",
+                    "viewer"
+                  ]
+                },
+                "taskSummary": {
+                  "type": "object",
+                  "properties": {
+                    "todo": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "inProgress": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "done": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "todo",
+                    "inProgress",
+                    "done"
+                  ]
+                },
+                "createdAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "ownerUserId",
+                "name",
+                "description",
+                "dueAt",
+                "memberRole",
+                "taskSummary",
+                "createdAt"
+              ]
+            }
+          }
+        },
+        "required": [
+          "projectRooms"
+        ]
+      },
+      "AimThreadCreate": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "contextType": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "title",
+          "contextType"
+        ]
+      },
+      "AimThreadsResponse": {
+        "type": "object",
+        "properties": {
+          "threads": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "userId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "contextType": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "userId",
+                "title",
+                "contextType",
+                "updatedAt"
+              ]
+            }
+          }
+        },
+        "required": [
+          "threads"
+        ]
+      },
+      "AimPromptRequest": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 2000
+          },
+          "contextType": {
+            "type": "string",
+            "enum": [
+              "career",
+              "release",
+              "outreach",
+              "contracts",
+              "pricing",
+              "analytics",
+              "next_steps"
+            ]
+          },
+          "artistSummary": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "prompt",
+          "contextType"
+        ]
+      },
+      "AimDraftResponse": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "response": {
+            "type": "object",
+            "properties": {
+              "summary": {
+                "type": "string"
+              },
+              "factualContext": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "generatedAdvice": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "nextActions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "caution": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "summary",
+              "factualContext",
+              "generatedAdvice",
+              "nextActions",
+              "caution"
+            ]
+          }
+        },
+        "required": [
+          "threadId",
+          "response"
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/api/feature-flags": {
+      "get": {
+        "tags": [
+          "Feature Flags"
+        ],
+        "responses": {
+          "200": {
+            "description": "Current feature flag state for the alpha app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureFlagsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/profile/me": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Current authenticated user and product profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Profile"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/onboarding": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Onboarding completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/map/query": {
+      "get": {
+        "tags": [
+          "Map"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "query",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "city",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "region",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "country",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "required": false,
+            "name": "genres",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "required": false,
+            "name": "instruments",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            },
+            "required": false,
+            "name": "skills",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "artist",
+                  "provider",
+                  "fan"
+                ]
+              },
+              "default": []
+            },
+            "required": false,
+            "name": "roles",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "boolean"
+            },
+            "required": false,
+            "name": "seekingCollaboration",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Map pins and hotspot summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapQueryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/collab-requests": {
+      "get": {
+        "tags": [
+          "Collaboration"
+        ],
+        "responses": {
+          "200": {
+            "description": "Collaboration requests visible to the current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollabRequestsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Collaboration"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollabRequestCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Collaboration request created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollabRequestsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/project-rooms": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project rooms the user can access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectRoomsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Projects"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectRoomCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Project room created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectRoomsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aim/threads": {
+      "get": {
+        "tags": [
+          "AiM"
+        ],
+        "responses": {
+          "200": {
+            "description": "AiM threads owned by the current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AimThreadsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "AiM"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AimThreadCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "AiM thread created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AimThreadsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/aim/respond": {
+      "post": {
+        "tags": [
+          "AiM"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AimPromptRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "AiM draft-only beta response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AimDraftResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
