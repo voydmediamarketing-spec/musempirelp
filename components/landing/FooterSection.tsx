@@ -21,7 +21,7 @@ export default function FooterSection() {
       <div className="mx-auto flex max-w-6xl flex-col gap-7">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p className="text-lg font-semibold text-white">[YOUR APP NAME]</p>
+            <p className="text-lg font-semibold text-white">Musempire</p>
             <p className="mt-1 text-sm text-white/62">Your Music. Your Empire. One Platform.</p>
           </div>
           <nav className="flex flex-wrap gap-4 text-sm text-white/68">

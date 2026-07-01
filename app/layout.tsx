@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "[YOUR APP NAME] | Your Music. Your Empire. One Platform.",
+  title: "Musempire | Your Music. Your Empire. One Platform.",
   description:
     "The all-in-one platform for the modern artist. Create. Collaborate. Conquer your career.",
 };

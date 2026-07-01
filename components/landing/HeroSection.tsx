@@ -21,7 +21,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
-          [YOUR APP NAME]
+          Musempire
         </motion.p>
         <motion.p
           className="mb-8 text-xs uppercase tracking-[0.25em] text-fuchsia-200/80"

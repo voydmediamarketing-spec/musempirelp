@@ -1,4 +1,4 @@
-# [YOUR APP NAME] Landing Page
+# Musempire Landing Page
 
 Animated, dark-mode-only music platform landing page built with Next.js 14 App Router, TypeScript, Tailwind CSS, Framer Motion, and Supabase.
 
@@ -30,15 +30,7 @@ Set values in `.env.local`:
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 
-3. Create the waitlist table in Supabase:
-
-```sql
-create table if not exists public.waitlist (
-  id bigint generated always as identity primary key,
-  email text not null unique,
-  created_at timestamptz not null default now()
-);
-```
+3. Create the waitlist table in Supabase by running `supabase/migrations/001_waitlist.sql`.
 
 4. Start the app:
 
