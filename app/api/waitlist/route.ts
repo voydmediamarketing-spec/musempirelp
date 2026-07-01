@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createAdminSupabaseClient } from "@/lib/supabase/admin";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { createAdminSupabaseClient, createPublicSupabaseClient } from "@/lib/supabase/admin";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -7,7 +8,11 @@ type WaitlistInsert = {
   email: string;
 };
 
-async function fetchWaitlistCount(supabase: NonNullable<ReturnType<typeof createAdminSupabaseClient>>) {
+function createWaitlistSupabaseClient() {
+  return createAdminSupabaseClient() ?? createPublicSupabaseClient();
+}
+
+async function fetchWaitlistCount(supabase: SupabaseClient) {
   const { count, error } = await supabase
     .from("waitlist")
     .select("id", { count: "exact", head: true });
@@ -20,7 +25,7 @@ async function fetchWaitlistCount(supabase: NonNullable<ReturnType<typeof create
 }
 
 export async function GET() {
-  const supabase = createAdminSupabaseClient();
+  const supabase = createWaitlistSupabaseClient();
 
   if (!supabase) {
     return NextResponse.json(
@@ -38,7 +43,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const supabase = createAdminSupabaseClient();
+  const supabase = createWaitlistSupabaseClient();
 
   if (!supabase) {
     return NextResponse.json(

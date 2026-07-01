@@ -1,15 +1,33 @@
 import { createClient } from "@supabase/supabase-js";
-import { getSupabaseServerKey, getSupabaseUrl, hasSupabaseServerEnv } from "@/lib/env";
+import {
+  getSupabasePublishableKey,
+  getSupabaseServerKey,
+  getSupabaseUrl,
+  hasSupabaseBrowserEnv,
+  hasSupabaseServerEnv,
+} from "@/lib/env";
+
+function createStatelessSupabaseClient(key: string) {
+  return createClient(getSupabaseUrl(), key, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+}
 
 export function createAdminSupabaseClient() {
   if (!hasSupabaseServerEnv()) {
     return null;
   }
 
-  return createClient(getSupabaseUrl(), getSupabaseServerKey(), {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  });
+  return createStatelessSupabaseClient(getSupabaseServerKey());
+}
+
+export function createPublicSupabaseClient() {
+  if (!hasSupabaseBrowserEnv()) {
+    return null;
+  }
+
+  return createStatelessSupabaseClient(getSupabasePublishableKey());
 }
