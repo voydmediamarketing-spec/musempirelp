@@ -71,13 +71,20 @@ export async function getProductViewer(): Promise<ProductViewer> {
     };
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select(
-      "user_id, display_name, username, bio, city, region, country, privacy_level, avatar_path, genres, instruments, skills, is_seeking_collaboration, consent_location, consent_ai, consent_marketing, users!inner(role, alpha_access_granted, onboarding_completed), profile_links(id, kind, label, url, is_primary)",
-    )
-    .eq("user_id", user.id)
-    .single();
+  const [{ data: profile }, { data: userDetails }] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select(
+        "user_id, display_name, username, bio, city, region, country, privacy_level, avatar_path, genres, instruments, skills, is_seeking_collaboration, consent_location, consent_ai, consent_marketing, profile_links(id, kind, label, url, is_primary)",
+      )
+      .eq("user_id", user.id)
+      .single(),
+    supabase
+      .from("users")
+      .select("role, alpha_access_granted, onboarding_completed")
+      .eq("id", user.id)
+      .single(),
+  ]);
 
   if (!profile) {
     return {
@@ -86,12 +93,33 @@ export async function getProductViewer(): Promise<ProductViewer> {
         id: user.id,
         email: user.email ?? null,
       },
-      profile: null,
+      profile: userDetails
+        ? {
+            userId: user.id,
+            displayName: user.email ?? "Musempire User",
+            username: null,
+            bio: null,
+            city: null,
+            region: null,
+            country: null,
+            privacyLevel: "city",
+            avatarUrl: null,
+            genres: [],
+            instruments: [],
+            skills: [],
+            isSeekingCollaboration: true,
+            consentLocation: false,
+            consentAi: false,
+            consentMarketing: false,
+            role: userDetails.role ?? null,
+            alphaAccessGranted: userDetails.alpha_access_granted ?? false,
+            onboardingCompleted: userDetails.onboarding_completed ?? false,
+            links: [],
+          }
+        : null,
       flags,
     };
   }
-
-  const userDetails = Array.isArray(profile.users) ? profile.users[0] : profile.users;
 
   return {
     envConfigured: true,
