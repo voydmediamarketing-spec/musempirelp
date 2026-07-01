@@ -47,10 +47,11 @@ $$;
 
 create or replace function public.is_visible_profile(profile_user_id uuid)
 returns boolean
-language sql
+language plpgsql
 stable
 as $$
-  select exists (
+begin
+  return exists (
     select 1
     from public.profiles p
     where p.user_id = profile_user_id
@@ -59,27 +60,31 @@ as $$
         or p.privacy_level <> 'hidden'
       )
   );
+end;
 $$;
 
 create or replace function public.is_project_member(room_id uuid)
 returns boolean
-language sql
+language plpgsql
 stable
 as $$
-  select exists (
+begin
+  return exists (
     select 1
     from public.project_members pm
     where pm.project_room_id = room_id
       and pm.user_id = auth.uid()
   );
+end;
 $$;
 
 create or replace function public.is_project_admin(room_id uuid)
 returns boolean
-language sql
+language plpgsql
 stable
 as $$
-  select exists (
+begin
+  return exists (
     select 1
     from public.project_members pm
     where pm.project_room_id = room_id
@@ -92,19 +97,22 @@ as $$
     where pr.id = room_id
       and pr.owner_user_id = auth.uid()
   );
+end;
 $$;
 
 create or replace function public.is_conversation_member(conversation_id_param uuid)
 returns boolean
-language sql
+language plpgsql
 stable
 as $$
-  select exists (
+begin
+  return exists (
     select 1
     from public.conversation_participants cp
     where cp.conversation_id = conversation_id_param
       and cp.user_id = auth.uid()
   );
+end;
 $$;
 
 create table if not exists public.users (
